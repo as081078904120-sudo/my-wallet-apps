@@ -1,0 +1,306 @@
+ <!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>डैशबोर्ड - प्रीमियम लुक</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            padding-bottom: 80px;
+        }
+        /* प्रीमियम हेडर विथ ग्रेडिएंट */
+        .app-header {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            padding: 20px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .user-info h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .user-info p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+        }
+        /* ग्लासमॉर्फिज़्म वॉलेट कार्ड */
+        .wallet-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wallet-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        .wallet-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4ade80;
+            margin-top: 4px;
+        }
+        .wallet-btn {
+            background: #ffffff;
+            color: #1e1b4b;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-decoration: none;
+        }
+        /* मुख्य कंटेनर */
+        .main-container {
+            padding: 15px;
+        }
+        /* बैनर / स्लाइडर जैसा लुक */
+        .promo-banner {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .promo-banner h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .promo-banner p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        /* क्विक एक्शंस ग्रिड */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #94a3b8;
+        }
+        .grid-menu {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .menu-item {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 15px 5px;
+            text-align: center;
+            text-decoration: none;
+            color: #f8fafc;
+            transition: 0.2s;
+        }
+        .menu-item:active {
+            transform: scale(0.95);
+        }
+        .menu-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+        .menu-name {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        /* लाइव स्टेट्स / स्टैटिस्टिक्स कार्ड्स */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 15px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        .stat-val {
+            font-size: 18px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+        /* बॉटम नेविगेशन बार (मॉडर्न ग्लासमॉर्फिज्म) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 1000;
+        }
+        .bottom-nav a {
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        .bottom-nav a.active {
+            color: #38bdf8;
+        }
+        .bottom-nav span {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- प्रीमियम हेडर -->
+    <div class="app-header">
+        <div class="header-top">
+            <div class="user-info">
+                <h2>स्वागत है, VIP यूजर 👋</h2>
+                <p>ID: #VIP_9824</p>
+            </div>
+            <div class="badge">💎 VIP Tier 1</div>
+        </div>
+
+        <!-- वॉलेट कार्ड -->
+        <div class="wallet-card">
+            <div>
+                <div class="wallet-title">कुल बैलेंस</div>
+                <div class="wallet-amount" id="dash-balance">₹ 1000</div>
+            </div>
+            <a href="wallet.html" class="wallet-btn">+ डिपॉजिट</a>
+        </div>
+    </div>
+
+    <!-- मुख्य कंटेंट -->
+    <div class="main-container">
+
+        <!-- शानदार प्रोमो बैनर -->
+        <div class="promo-banner">
+            <h3>⚡ धमाकेदार दैनिक कमाई</h3>
+            <p>हर दिन प्रोडक्ट से कमाएं ₹1000 तक का रिटर्न। आज ही अपना VIP प्लान एक्टिव करें!</p>
+        </div>
+
+        <!-- क्विक शॉर्टकट मेनू -->
+        <div class="section-title">क्विक एक्शंस</div>
+        <div class="grid-menu">
+            <a href="wallet.html" class="menu-item">
+                <div class="menu-icon">💳</div>
+                <div class="menu-name">डिपॉजिट</div>
+            </a>
+            <a href="wallet.html" class="menu-item">
+                <div class="menu-icon">🏦</div>
+                <div class="menu-name">विड्रॉल</div>
+            </a>
+            <a href="products.html" class="menu-item">
+                <div class="menu-icon">🛍️</div>
+                <div class="menu-name">प्रोडक्ट्स</div>
+            </a>
+            <a href="referral.html" class="menu-item">
+                <div class="menu-icon">👥</div>
+                <div class="menu-name">रेफरल</div>
+            </a>
+        </div>
+
+        <!-- लाइव स्टेट्स -->
+        <div class="section-title">पॉकेट ओवरव्यू</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">आज की कुल आय</div>
+                <div class="stat-val" id="today-income">₹ 0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">सक्रिय प्लान</div>
+                <div class="stat-val" id="active-plans-count">0 एक्टिव</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- बॉटम नेविगेशन बार -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="active">
+            <span>🏠</span>
+            होम
+        </a>
+        <a href="wallet.html">
+            <span>💰</span>
+            वॉलेट
+        </a>
+        <a href="products.html">
+            <span>🛍️</span>
+            प्रोडक्ट्स
+        </a>
+        <a href="referral.html">
+            <span>👥</span>
+            रेफरल
+        </a>
+    </div>
+
+    <script>
+        // वॉलेट बैलेंस सिंक करना
+        let walletBalance = localStorage.getItem("userWallet");
+        if (walletBalance === null) {
+            walletBalance = 1000;
+            localStorage.setItem("userWallet", walletBalance);
+        } else {
+            walletBalance = parseInt(walletBalance);
+        }
+        document.getElementById("dash-balance").innerText = "₹ " + walletBalance;
+
+        // एक्टिव प्लान्स और आज की आय की गणना
+        let activePlans = JSON.parse(localStorage.getItem("userActivePlans")) || [];
+        document.getElementById("active-plans-count").innerText = activePlans.length + " एक्टिव";
+
+        let totalDailyIncome = 0;
+        activePlans.forEach(plan => {
+            totalDailyIncome += plan.income;
+        });
+        document.getElementById("today-income").innerText = "₹ " + totalDailyIncome;
+    </script>
+
+</body>
+</html>
