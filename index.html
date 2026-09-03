@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Secure App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b, #311042);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            background: linear-gradient(90deg, #38bdf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #0284c7, #9333ea);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .switch-text {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .switch-text span {
+            color: #38bdf8;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .error-msg {
+            color: #f43f5e;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 id="form-title">Login</h2>
+        
+        <div class="input-group">
+            <label>Mobile Number</label>
+            <input type="tel" id="mobile" placeholder="Enter mobile number" maxlength="10">
+        </div>
+        
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+        </div>
+
+        <div class="input-group" id="otp-group" style="display: none;">
+            <label>Enter 4-Digit OTP (Simulated: 1234)</label>
+            <input type="text" id="otp" placeholder="Enter OTP" maxlength="4">
+        </div>
+
+        <button class="btn" id="action-btn" onclick="handleAction()">Login</button>
+        
+        <div class="error-msg" id="error"></div>
+
+        <div class="switch-text" id="switch-container">
+            Don't have an account? <span onclick="toggleMode()">Register</span>
+        </div>
+    </div>
+
+    <script>
+        let isLogin = true;
+
+        function toggleMode() {
+            isLogin = !isLogin;
+            document.getElementById('form-title').innerText = isLogin ? 'Login' : 'Register';
+            document.getElementById('action-btn').innerText = isLogin ? 'Login' : 'Next (Verify OTP)';
+            document.getElementById('switch-container').innerHTML = isLogin ? 
+                'Don\'t have an account? <span onclick="toggleMode()">Register</span>' : 
+                'Already have an account? <span onclick="toggleMode()">Login</span>';
+            document.getElementById('otp-group').style.display = 'none';
+            document.getElementById('error').innerText = '';
+        }
+
+        function handleAction() {
+            const mobile = document.getElementById('mobile').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error');
+
+            if (!mobile || mobile.length < 10) {
+                errorElement.innerText = 'Please enter a valid 10-digit mobile number.';
+                return;
+            }
+            if (!password) {
+                errorElement.innerText = 'Please enter your password.';
+                return;
+            }
+
+            if (isLogin) {
+                // Login Flow
+                const savedUser = localStorage.getItem('user_' + mobile);
+                if (!savedUser) {
+                    errorElement.innerText = 'Account not found! Please register first.';
+                    return;
+                }
+                const userData = JSON.parse(savedUser);
+                if (userData.password !== password) {
+                    errorElement.innerText = 'Incorrect password!';
+                    return;
+                }
+
+                // Successful Login
+                localStorage.setItem('current_user', mobile);
+                window.location.href = 'dashboard.html';
+
+            } else {
+                // Registration Step 1 -> Show OTP
+                const otpGroup = document.getElementById('otp-group');
+                if (otpGroup.style.display === 'none') {
+                    otpGroup.style.display = 'block';
+                    document.getElementById('action-btn').innerText = 'Verify & Register';
+                    errorElement.style.color = '#38bdf8';
+                    errorElement.innerText = 'OTP Sent! Use 1234 for simulation.';
+                    return;
+                }
+
+                // Registration Step 2 -> Verify OTP
+                const otp = document.getElementById('otp').value;
+                if (otp !== '1234') {
+                    errorElement.style.color = '#f43f5e';
+                    errorElement.innerText = 'Invalid OTP! Enter 1234.';
+                    return;
+                }
+
+                // Save User Data & Initialize ₹0 balance & store registration password securely for withdrawal check
+                const userData = {
+                    mobile: mobile,
+                    password: password,
+                    balance: 0
+                };
+                localStorage.setItem('user_' + mobile, JSON.stringify(userData));
+                localStorage.setItem('current_user', mobile);
+
+                alert('Registration Successful!');
+                window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>
